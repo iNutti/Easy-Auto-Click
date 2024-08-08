@@ -7,6 +7,8 @@ More complex mouse clicking functions
 * Progress bar to indicate time to completion.
 * Visible timer to also do that.
  
+If you would like to download the latest pre-release version, click on the "Releases" button on the right side of this page.  
+
 And that's all I can think of for now. Feel free to leave ideas!
 >[!Note]
 >I do this for fun. Please be aware that it may take some time for updates to happen, or no time at all.
