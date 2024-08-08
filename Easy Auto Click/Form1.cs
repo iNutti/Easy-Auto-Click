@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
 
@@ -7,11 +8,17 @@ namespace Easy_Auto_Click
 {
     public partial class easyAutoClick : Form
     {
-        //static System.Windows.Forms.Timer tCountdownTimer = new System.Windows.Forms.Timer();
+        public CancellationTokenSource cts = new();
 
-        //BackgroundWorker timer = new();
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
 
-        CancellationTokenSource cts = new();
+        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+        private const int MOUSEEVENTF_LEFTUP = 0x04;
+        private const int MOUSEEVENTF_MIDDLEDOWN = 0x20;
+        private const int MOUSEEVENTF_MIDDLEUP = 0x40;
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+        private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
         string userDefinedKeys = "a";
 
@@ -20,13 +27,12 @@ namespace Easy_Auto_Click
         int numSeconds = 0;
         int numMilliseconds = 0;
         int countdownTimer = 0;
-        int numActions;
+        int numActions = 1;
+        public int keyPresses = 1;
 
-        bool wasRun = false;
+        public bool toggle;
         bool isPaused = false;
         bool infinite = false;
-        bool mouseIsUsed = false;
-        bool timerIsDone = false;
 
         Object sender;
         ElapsedEventArgs a;
@@ -62,9 +68,10 @@ namespace Easy_Auto_Click
         private void tbMilliseconds_Enter(Object sender, EventArgs e) { tbMilliseconds.SelectAll(); }
         private void tbRepetitions_Enter(Object sender, EventArgs e) { tbRepetitions.SelectAll(); }
 
-        private void timer_ProgressChanged(object sender, ProgressChangedEventArgs e) { progressBar1.Value = e.ProgressPercentage; }
+        private void timer_ProgressChanged(Object sender, ProgressChangedEventArgs e) { progressBar1.Value = e.ProgressPercentage; }
         private void tCountdownTimer_tick(Object sender, EventArgs e) {/*tCountdownTimer.Tick += new System.EventHandler(OnTimerEvent);*/}
 
+        private void cbKeyboardOrMouse_SelectedIndexChanged(Object sender, EventArgs e) { if (cbKeyboardOrMouse.SelectedIndex == 0) { cbButtonChoice.Enabled = false; } else { cbButtonChoice.Enabled = true; } }
         private void cbInfiniteOrFinite_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if (cbInfiniteOrFinite.SelectedIndex == 1)
@@ -80,68 +87,68 @@ namespace Easy_Auto_Click
         private void btnStart_Click(Object sender, EventArgs e)
         {
             this.timer.CancelAsync();
-            if (int.TryParse(tbHours.Text, out numHours))
-            {/*Hours successfully parsed*/
-                if (int.TryParse(tbMinutes.Text, out numMinutes)) {/*Minutes successfully parsed*/}
-                if (int.TryParse(tbSeconds.Text, out numSeconds)) {/*Seconds successfully parsed*/}
-                if ((int.TryParse(tbMilliseconds.Text, out numMilliseconds))) {/*Milliseconds successfully parsed*/}
-                if (cbKeyboardOrMouse.SelectedIndex == 1) { mouseIsUsed = true; }
-                if (numHours != 0 || numMinutes != 0 || numSeconds != 0 || numMilliseconds != 0)
-                {
-                    btnStart.Enabled = false;
-                    btnPause.Enabled = true;
-                    btnStop.Enabled = true;
-                    progressBar1.Enabled = false;
-                    tbHours.Enabled = false;
-                    tbMinutes.Enabled = false;
-                    tbSeconds.Enabled = false;
-                    tbMilliseconds.Enabled = false;
-                    tbKeyPresses.Enabled = false;
-                    tbRepetitions.Enabled = false;
-                    cbButtonChoice.Enabled = false;
-                    cbInfiniteOrFinite.Enabled = false;
-                    cbKeyboardOrMouse.Enabled = false;
+            if (int.TryParse(tbHours.Text, out numHours)) {/*Hours successfully parsed*/}
+            if (int.TryParse(tbMinutes.Text, out numMinutes)) {/*Minutes successfully parsed*/}
+            if (int.TryParse(tbSeconds.Text, out numSeconds)) {/*Seconds successfully parsed*/}
+            if ((int.TryParse(tbMilliseconds.Text, out numMilliseconds))) {/*Milliseconds successfully parsed*/}
+            if (cbKeyboardOrMouse.SelectedIndex == 1) { if (int.TryParse(tbKeyPresses.Text, out keyPresses)) {/*Key presses successfully parsed*/ } }
+            //if (cbKeyboardOrMouse.SelectedIndex == 1) { mouseIsUsed = true; }
+            if (numHours != 0 || numMinutes != 0 || numSeconds != 0 || numMilliseconds != 0)
+            {
+                btnStart.Enabled = false;
+                btnStop.Enabled = true;
+                progressBar1.Enabled = false;
+                tbHours.Enabled = false;
+                tbMinutes.Enabled = false;
+                tbSeconds.Enabled = false;
+                tbMilliseconds.Enabled = false;
+                tbKeyPresses.Enabled = false;
+                tbRepetitions.Enabled = false;
+                cbButtonChoice.Enabled = false;
+                cbInfiniteOrFinite.Enabled = false;
+                cbKeyboardOrMouse.Enabled = false;
 
-                    if (cbInfiniteOrFinite.SelectedIndex == 0)
+                if (cbInfiniteOrFinite.SelectedIndex == 0)
+                {
+                    infinite = true;
+                    timer.RunWorkerAsync();
+                }
+                else
+                {
+                    if (int.TryParse(tbRepetitions.Text, out numActions))
                     {
-                        infinite = true;
-                        timer.RunWorkerAsync();
+                        timer.RunWorkerAsync(numActions);
                     }
-                    else
-                    {
-                        if (int.TryParse(tbRepetitions.Text, out numActions))
-                        {
-                            timer.RunWorkerAsync(numActions);
-                        }
-                        else MessageBox.Show("Please enter a repetition number if 'finite' is selected.");
-                    }
+                    else MessageBox.Show("Please enter a repetition number if 'finite' is selected.");
+                    btnStop_Click(sender, e);
                 }
             }
         }
 
         private void StartAsyncButton_Click(Object sender, EventArgs e) { if (timer.IsBusy != true) { timer.RunWorkerAsync(); } }
-        private void btnPause_Click(Object sender, EventArgs e) { pauseAsyncButton_Click(sender, e); }
-
-        private void pauseAsyncButton_Click(Object sender, EventArgs e)
-        {
-            if (isPaused == false)
-            {
-                btnPause.Text = "Unpause";
-                isPaused = true;
-                DoWorkAsync(cts.Token);
-            }
-            else if (isPaused == true)
-            {
-                btnPause.Text = "Pause";
-                isPaused = false;
-            }
-        }
-
+        /*
+                private void pauseAsyncButton_Click(Object sender, EventArgs e)
+                {
+                    if (isPaused == false)
+                    {
+                        btnPause.Text = "Unpause";
+                        isPaused = true;
+                        if (cts.Token.IsCancellationRequested == true)
+                            {DoWorkAsync(cts.Token);}
+                        if (cts1.Token.IsCancellationRequested == true)
+                            {DoWorkAsync(cts1.Token);}
+                    }
+                    else if (isPaused == true)
+                    {
+                        btnPause.Text = "Pause";
+                        isPaused = false;
+                    }
+                }
+        */
         private void btnStop_Click(Object sender, EventArgs e)
         {
             tCountdownTimer.Stop();
             btnStart.Enabled = true;
-            btnPause.Enabled = false;
             btnStop.Enabled = false;
             progressBar1.Enabled = true;
             tbHours.Enabled = true;
@@ -150,9 +157,9 @@ namespace Easy_Auto_Click
             tbMilliseconds.Enabled = true;
             tbKeyPresses.Enabled = true;
             tbRepetitions.Enabled = true;
-            cbButtonChoice.Enabled = true;
             cbInfiniteOrFinite.Enabled = true;
             cbKeyboardOrMouse.Enabled = true;
+            if (cbKeyboardOrMouse.SelectedIndex != 1) { cbKeyboardOrMouse.Enabled = false; }
             this.timer.CancelAsync();
             CancellationToken cancellationToken = cts.Token;
             cts.Cancel();
@@ -166,7 +173,9 @@ namespace Easy_Auto_Click
             countdownTimer = Time.TimeInputCalculation(numHours, numMinutes, numSeconds, numMilliseconds);
             if (infinite == true)
             {
-                for (int i = 1; i <= 10; i--)
+                CancellationTokenSource cts3 = new();
+                await DoWorkAsync(cts3.Token);
+                for (int i = 1; i <= 2; i--)
                 {
                     if (timer.CancellationPending == true)
                     {
@@ -175,15 +184,18 @@ namespace Easy_Auto_Click
                     }
                     else
                     {
-                        await DoWorkAsync(cts.Token);
-                        //timer.ReportProgress(i * 10);
+                        for (int j = 0; j < keyPresses; j++) { PerformUserDefinedAction(); }
                         Debug.WriteLine("Timer completed at: " + DateTime.Now);
+                        await DoWorkAsync(cts3.Token);
+                        //timer.ReportProgress(i * 10);
                     }
                 }
             }
             else
             {
+                CancellationTokenSource cts4 = new();
                 int numActionsLeft = numActions;
+                await DoWorkAsync(cts4.Token);
                 for (int i = 1; i <= numActions; i++)
                 {
                     if (timer.CancellationPending == true)
@@ -193,10 +205,11 @@ namespace Easy_Auto_Click
                     }
                     else
                     {
-                        await DoWorkAsync(cts.Token);
-                        //timer.ReportProgress(i * 10);
+                        for (int j = 0; j < keyPresses; j++) { PerformUserDefinedAction(); };
                         numActionsLeft--;
                         Debug.WriteLine("Timer completed at: " + DateTime.Now + ", " + numActionsLeft + " actions left");
+                        await DoWorkAsync(cts4.Token);
+                        //timer.ReportProgress(Math.Abs(i) * 10);
                     }
                 }
             }
@@ -204,7 +217,6 @@ namespace Easy_Auto_Click
             {
                 tCountdownTimer.Stop();
                 btnStart.Enabled = true;
-                btnPause.Enabled = false;
                 btnStop.Enabled = false;
                 progressBar1.Enabled = true;
                 tbHours.Enabled = true;
@@ -219,14 +231,50 @@ namespace Easy_Auto_Click
             });
         }
 
+        public void PerformUserDefinedAction()
+        {
+            int keyboardOrMouse = 1;
+            int buttonChoice = 0;
+            this.Invoke((MethodInvoker)delegate
+            {
+                keyboardOrMouse = cbKeyboardOrMouse.SelectedIndex;
+                buttonChoice = cbButtonChoice.SelectedIndex;
+            });
+            if (keyboardOrMouse == 1)
+            {
+                if (buttonChoice == 0) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0); }
+                else if (buttonChoice == 1) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, X, Y, 0, 0); }
+                else if (buttonChoice == 2) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_MIDDLEDOWN | MOUSEEVENTF_MIDDLEUP, X, Y, 0, 0); }
+            }
+            else
+            {
+                // Keyboard typing goes here
+            }
+        }
+
         public async Task DoWorkAsync(CancellationToken cancellationToken)
         {
+            this.Invoke((MethodInvoker)delegate
+            {
+                btnStart.Enabled = false;
+                btnStop.Enabled = true;
+                progressBar1.Enabled = false;
+                tbHours.Enabled = false;
+                tbMinutes.Enabled = false;
+                tbSeconds.Enabled = false;
+                tbMilliseconds.Enabled = false;
+                tbKeyPresses.Enabled = false;
+                tbRepetitions.Enabled = false;
+                cbButtonChoice.Enabled = false;
+                cbInfiniteOrFinite.Enabled = false;
+                cbKeyboardOrMouse.Enabled = false;
+            });
             try
             {
                 await Task.Delay(countdownTimer, cancellationToken);
                 while (isPaused)
                 {
-                    await Task.Delay(100);
+                    await Task.Delay(250);
                 }
             }
             catch (TaskCanceledException ex)
@@ -278,7 +326,7 @@ namespace Easy_Auto_Click
         public void openToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read))
             {
                 byte[] data = new byte[fs.Length];
                 fs.Read(data, 0, data.Length);
@@ -302,10 +350,12 @@ namespace Easy_Auto_Click
                         if (key == "Button choice") { int.TryParse(value, out int numValue); cbButtonChoice.SelectedIndex = numValue; }
                         if (key == "# Key presses") { tbKeyPresses.Text = value; }
                         if (key == "Infinite") { int.TryParse(value, out int numValue); cbInfiniteOrFinite.SelectedIndex = numValue; }
+                        if (key == "# Repeats") { int.TryParse(value, out int numValue); tbRepetitions.Text = value; }
                     }
                 }
                 fs.Close();
             }
+
         }
 
         private void alwaysOnTopToolStripMenuItem_Click(Object sender, EventArgs e)
@@ -324,12 +374,12 @@ namespace Easy_Auto_Click
         private void githubToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string gitHubLink = "https://github.com/iNutti/Easy-Auto-Click/tree/master";
-            Process.Start(new ProcessStartInfo(gitHubLink){ UseShellExecute = true});
+            Process.Start(new ProcessStartInfo(gitHubLink) { UseShellExecute = true });
         }
 
         private void patreonToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string patreonLink = "";
+            string patreonLink = "youtube.com";
             Process.Start(new ProcessStartInfo(patreonLink) { UseShellExecute = true });
         }
 
@@ -378,6 +428,11 @@ namespace Easy_Auto_Click
                 fs.Close();
             }
             openToolStripMenuItem_Click(sender, e);
+        }
+
+        private void btnToggle_Click(object sender, EventArgs e)
+        {
+            if (toggle == false) { btnStop_Click(sender, e); toggle = true; } else { btnStart_Click(sender, e); toggle = false; }
         }
     }
 }

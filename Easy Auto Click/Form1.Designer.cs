@@ -51,7 +51,6 @@ namespace Easy_Auto_Click
             btnStart = new Button();
             progressBar1 = new ProgressBar();
             btnStop = new Button();
-            btnPause = new Button();
             tbHours = new TextBox();
             tbMinutes = new TextBox();
             gbInterval = new GroupBox();
@@ -67,6 +66,7 @@ namespace Easy_Auto_Click
             cbButtonChoice = new ComboBox();
             cbKeyboardOrMouse = new ComboBox();
             timer = new System.ComponentModel.BackgroundWorker();
+            btnToggle = new Button();
             menuStrip1.SuspendLayout();
             gbInterval.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -149,7 +149,7 @@ namespace Easy_Auto_Click
             // 
             alwaysOnTopToolStripMenuItem.CheckOnClick = true;
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(180, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(169, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always on top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
@@ -157,14 +157,14 @@ namespace Easy_Auto_Click
             // 
             saveOnExitToolStripMenuItem.CheckOnClick = true;
             saveOnExitToolStripMenuItem.Name = "saveOnExitToolStripMenuItem";
-            saveOnExitToolStripMenuItem.Size = new Size(180, 22);
+            saveOnExitToolStripMenuItem.Size = new Size(169, 22);
             saveOnExitToolStripMenuItem.Text = "Save on exit";
             // 
             // closeOnceFinishedToolStripMenuItem
             // 
             closeOnceFinishedToolStripMenuItem.CheckOnClick = true;
             closeOnceFinishedToolStripMenuItem.Name = "closeOnceFinishedToolStripMenuItem";
-            closeOnceFinishedToolStripMenuItem.Size = new Size(180, 22);
+            closeOnceFinishedToolStripMenuItem.Size = new Size(169, 22);
             closeOnceFinishedToolStripMenuItem.Text = "Close when done";
             // 
             // supportToolStripMenuItem
@@ -178,14 +178,14 @@ namespace Easy_Auto_Click
             // githubToolStripMenuItem
             // 
             githubToolStripMenuItem.Name = "githubToolStripMenuItem";
-            githubToolStripMenuItem.Size = new Size(180, 22);
+            githubToolStripMenuItem.Size = new Size(117, 22);
             githubToolStripMenuItem.Text = "Github";
             githubToolStripMenuItem.Click += githubToolStripMenuItem_Click;
             // 
             // patreonToolStripMenuItem
             // 
             patreonToolStripMenuItem.Name = "patreonToolStripMenuItem";
-            patreonToolStripMenuItem.Size = new Size(180, 22);
+            patreonToolStripMenuItem.Size = new Size(117, 22);
             patreonToolStripMenuItem.Text = "Patreon";
             patreonToolStripMenuItem.Click += patreonToolStripMenuItem_Click;
             // 
@@ -222,18 +222,6 @@ namespace Easy_Auto_Click
             btnStop.Text = "S&top";
             btnStop.UseVisualStyleBackColor = true;
             btnStop.Click += btnStop_Click;
-            // 
-            // btnPause
-            // 
-            btnPause.Enabled = false;
-            btnPause.Font = new Font("Montserrat", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnPause.Location = new Point(142, 289);
-            btnPause.Name = "btnPause";
-            btnPause.Size = new Size(100, 60);
-            btnPause.TabIndex = 1;
-            btnPause.Text = "&Pause";
-            btnPause.UseVisualStyleBackColor = true;
-            btnPause.Click += btnPause_Click;
             // 
             // tbHours
             // 
@@ -367,11 +355,23 @@ namespace Easy_Auto_Click
             cbKeyboardOrMouse.AutoCompleteMode = AutoCompleteMode.Suggest;
             cbKeyboardOrMouse.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbKeyboardOrMouse.FormattingEnabled = true;
-            cbKeyboardOrMouse.Items.AddRange(new object[] { "Keyboard", "Mouse" });
+            cbKeyboardOrMouse.Items.AddRange(new object[] { "Keyboard (WIP)", "Mouse" });
             cbKeyboardOrMouse.Location = new Point(6, 23);
             cbKeyboardOrMouse.Name = "cbKeyboardOrMouse";
             cbKeyboardOrMouse.Size = new Size(102, 23);
             cbKeyboardOrMouse.TabIndex = 0;
+            cbKeyboardOrMouse.SelectedIndexChanged += cbKeyboardOrMouse_SelectedIndexChanged;
+            // 
+            // btnToggle
+            // 
+            btnToggle.Font = new Font("Montserrat", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnToggle.Location = new Point(142, 289);
+            btnToggle.Name = "btnToggle";
+            btnToggle.Size = new Size(100, 60);
+            btnToggle.TabIndex = 13;
+            btnToggle.Text = "&Toggle";
+            btnToggle.UseVisualStyleBackColor = true;
+            btnToggle.Click += btnToggle_Click;
             // 
             // easyAutoClick
             // 
@@ -379,11 +379,12 @@ namespace Easy_Auto_Click
             AccessibleName = "Easy Auto Click";
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(384, 361);
+            Controls.Add(btnToggle);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(gbInterval);
-            Controls.Add(btnPause);
             Controls.Add(btnStop);
             Controls.Add(btnStart);
             Controls.Add(menuStrip1);
@@ -423,7 +424,6 @@ namespace Easy_Auto_Click
         private Button btnStart;
         private ProgressBar progressBar1;
         private Button btnStop;
-        private Button btnPause;
         private TextBox tbHours;
         private TextBox tbMinutes;
         private GroupBox gbInterval;
@@ -434,8 +434,6 @@ namespace Easy_Auto_Click
         private ToolStripMenuItem alwaysOnTopToolStripMenuItem;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
-        private ComboBox cbButtonChoice;
-        private ComboBox cbKeyboardOrMouse;
         private TextBox tbRepetitions;
         private ComboBox cbInfiniteOrFinite;
         private TextBox tbKeyPresses;
@@ -448,5 +446,8 @@ namespace Easy_Auto_Click
         private ToolStripMenuItem githubToolStripMenuItem;
         private ToolStripMenuItem patreonToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker timer;
+        public ComboBox cbButtonChoice;
+        public ComboBox cbKeyboardOrMouse;
+        private Button btnToggle;
     }
 }
