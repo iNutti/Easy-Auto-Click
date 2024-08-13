@@ -30,6 +30,7 @@ namespace Easy_Auto_Click
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(easyAutoClick));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
@@ -43,6 +44,8 @@ namespace Easy_Auto_Click
             alwaysOnTopToolStripMenuItem = new ToolStripMenuItem();
             saveOnExitToolStripMenuItem = new ToolStripMenuItem();
             closeOnceFinishedToolStripMenuItem = new ToolStripMenuItem();
+            keyboardTypingToolStripMenuItem = new ToolStripMenuItem();
+            hotkeysToolStripMenuItem = new ToolStripMenuItem();
             supportToolStripMenuItem = new ToolStripMenuItem();
             githubToolStripMenuItem = new ToolStripMenuItem();
             patreonToolStripMenuItem = new ToolStripMenuItem();
@@ -139,7 +142,7 @@ namespace Easy_Auto_Click
             // 
             // optionsToolStripMenuItem
             // 
-            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, saveOnExitToolStripMenuItem, closeOnceFinishedToolStripMenuItem });
+            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, saveOnExitToolStripMenuItem, closeOnceFinishedToolStripMenuItem, keyboardTypingToolStripMenuItem, hotkeysToolStripMenuItem });
             optionsToolStripMenuItem.Font = new Font("Montserrat", 8F);
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.Size = new Size(61, 20);
@@ -149,7 +152,7 @@ namespace Easy_Auto_Click
             // 
             alwaysOnTopToolStripMenuItem.CheckOnClick = true;
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(169, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(199, 22);
             alwaysOnTopToolStripMenuItem.Text = "Always on top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
@@ -157,15 +160,29 @@ namespace Easy_Auto_Click
             // 
             saveOnExitToolStripMenuItem.CheckOnClick = true;
             saveOnExitToolStripMenuItem.Name = "saveOnExitToolStripMenuItem";
-            saveOnExitToolStripMenuItem.Size = new Size(169, 22);
+            saveOnExitToolStripMenuItem.Size = new Size(199, 22);
             saveOnExitToolStripMenuItem.Text = "Save on exit";
             // 
             // closeOnceFinishedToolStripMenuItem
             // 
             closeOnceFinishedToolStripMenuItem.CheckOnClick = true;
             closeOnceFinishedToolStripMenuItem.Name = "closeOnceFinishedToolStripMenuItem";
-            closeOnceFinishedToolStripMenuItem.Size = new Size(169, 22);
+            closeOnceFinishedToolStripMenuItem.Size = new Size(199, 22);
             closeOnceFinishedToolStripMenuItem.Text = "Close when done";
+            // 
+            // keyboardTypingToolStripMenuItem
+            // 
+            keyboardTypingToolStripMenuItem.Name = "keyboardTypingToolStripMenuItem";
+            keyboardTypingToolStripMenuItem.Size = new Size(199, 22);
+            keyboardTypingToolStripMenuItem.Text = "Keyboard phrase (WIP)";
+            keyboardTypingToolStripMenuItem.Click += keyboardTypingToolStripMenuItem_Click;
+            // 
+            // hotkeysToolStripMenuItem
+            // 
+            hotkeysToolStripMenuItem.Name = "hotkeysToolStripMenuItem";
+            hotkeysToolStripMenuItem.Size = new Size(199, 22);
+            hotkeysToolStripMenuItem.Text = "Hotkeys (WIP)";
+            hotkeysToolStripMenuItem.Click += hotkeysToolStripMenuItem_Click;
             // 
             // supportToolStripMenuItem
             // 
@@ -389,7 +406,9 @@ namespace Easy_Auto_Click
             Controls.Add(btnStart);
             Controls.Add(menuStrip1);
             Controls.Add(progressBar1);
+            Cursor = Cursors.Hand;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             MaximizeBox = false;
             Name = "easyAutoClick";
@@ -449,5 +468,7 @@ namespace Easy_Auto_Click
         public ComboBox cbButtonChoice;
         public ComboBox cbKeyboardOrMouse;
         private Button btnToggle;
+        private ToolStripMenuItem keyboardTypingToolStripMenuItem;
+        private ToolStripMenuItem hotkeysToolStripMenuItem;
     }
 }

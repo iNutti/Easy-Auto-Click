@@ -20,6 +20,10 @@ namespace Easy_Auto_Click
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
+        public string startHotkey = "F7";
+        public string toggleHotkey = "F8";
+        public string stopHotkey = "F9";
+        public string keyBoardPhrase = "Hello world!";
         string userDefinedKeys = "a";
 
         int numHours = 0;
@@ -40,11 +44,15 @@ namespace Easy_Auto_Click
         ProgressChangedEventArgs c;
         RunWorkerCompletedEventArgs d;
         EventArgs e;
+        FormClosingEventArgs f;
 
         public easyAutoClick()
         {
             InitializeComponent();
             InitializeBackgroundWorker();
+
+            this.KeyPreview = true;
+            this.KeyDown += new KeyEventHandler(Hotkey_KeyDown);
 
             cbKeyboardOrMouse.SelectedIndex = 0;
             cbInfiniteOrFinite.SelectedIndex = 0;
@@ -58,6 +66,12 @@ namespace Easy_Auto_Click
             tbSeconds.Click += new EventHandler(tbSeconds_Enter);
             tbMilliseconds.Click += new EventHandler(tbMilliseconds_Enter);
             tbRepetitions.Click += new EventHandler(tbRepetitions_Enter);
+
+            btnStart.Text = "&Start\n" + startHotkey;
+            btnToggle.Text = "&Toggle\n" + toggleHotkey;
+            btnStop.Text = "&Stop\n" + stopHotkey;
+
+            cbKeyboardOrMouse.SelectedIndex = 1;
         }
 
         private void InitializeBackgroundWorker() { timer.DoWork += new DoWorkEventHandler(Timer_DoWork); }
@@ -156,10 +170,10 @@ namespace Easy_Auto_Click
             tbSeconds.Enabled = true;
             tbMilliseconds.Enabled = true;
             tbKeyPresses.Enabled = true;
-            tbRepetitions.Enabled = true;
             cbInfiniteOrFinite.Enabled = true;
             cbKeyboardOrMouse.Enabled = true;
-            if (cbKeyboardOrMouse.SelectedIndex != 1) { cbKeyboardOrMouse.Enabled = false; }
+            if (cbKeyboardOrMouse.SelectedIndex != 1) { cbButtonChoice.Enabled = false; }
+            if (cbInfiniteOrFinite.SelectedIndex == 1) { tbRepetitions.Enabled = true; }
             this.timer.CancelAsync();
             CancellationToken cancellationToken = cts.Token;
             cts.Cancel();
@@ -355,7 +369,8 @@ namespace Easy_Auto_Click
                 }
                 fs.Close();
             }
-
+            if (cbKeyboardOrMouse.SelectedIndex == 0) { this.Invoke((MethodInvoker)delegate { cbButtonChoice.Enabled = false; }); }
+            if (cbInfiniteOrFinite.SelectedIndex == 0) { this.Invoke((MethodInvoker)delegate { tbRepetitions.Enabled = false; tbRepetitions.Text = "Repititions"; }); }
         }
 
         private void alwaysOnTopToolStripMenuItem_Click(Object sender, EventArgs e)
@@ -385,23 +400,6 @@ namespace Easy_Auto_Click
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) { this.Close(); }
 
-        private void easyAutoClick_FormClosing(Object sender, FormClosingEventArgs e)
-        {
-            if (saveOnExitToolStripMenuItem.Checked) { saveToolStripMenuItem_Click(sender, e); }
-            string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\menu.txt";
-            string alwaysOnTopChecked = "false";
-            string saveOnExitChecked = "false";
-            string closeOnceFinished = "false";
-            if (alwaysOnTopToolStripMenuItem.Checked == true) { alwaysOnTopChecked = "true"; }
-            if (saveOnExitToolStripMenuItem.Checked == true) { saveOnExitChecked = "true"; }
-            if (closeOnceFinishedToolStripMenuItem.Checked == true) { closeOnceFinished = "true"; }
-            string menu = "Always on top: " + alwaysOnTopChecked + "\nSave on exit: " + saveOnExitChecked + "\nClose when done: " + closeOnceFinished;
-            byte[] data = Encoding.UTF8.GetBytes(menu);
-            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
-            { fs.Write(data, 0, menu.Length); }
-            fs.Close();
-        }
-
         private void easyAutoClick_Load(Object sender, EventArgs e)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\menu.txt";
@@ -430,9 +428,55 @@ namespace Easy_Auto_Click
             openToolStripMenuItem_Click(sender, e);
         }
 
+        private void easyAutoClick_FormClosing(Object sender, FormClosingEventArgs e)
+        {
+            if (saveOnExitToolStripMenuItem.Checked) { saveToolStripMenuItem_Click(sender, e); }
+            string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\menu.txt";
+            string alwaysOnTopChecked = "false";
+            string saveOnExitChecked = "false";
+            string closeOnceFinished = "false";
+            if (alwaysOnTopToolStripMenuItem.Checked == true) { alwaysOnTopChecked = "true"; }
+            if (saveOnExitToolStripMenuItem.Checked == true) { saveOnExitChecked = "true"; }
+            if (closeOnceFinishedToolStripMenuItem.Checked == true) { closeOnceFinished = "true"; }
+            string menu = "Always on top: " + alwaysOnTopChecked + "\nSave on exit: " + saveOnExitChecked + "\nClose when done: " + closeOnceFinished;
+            byte[] data = Encoding.UTF8.GetBytes(menu);
+            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
+            { fs.Write(data, 0, menu.Length); }
+            fs.Close();
+        }
+
         private void btnToggle_Click(object sender, EventArgs e)
         {
             if (toggle == false) { btnStop_Click(sender, e); toggle = true; } else { btnStart_Click(sender, e); toggle = false; }
+        }
+
+        public void keyboardTypingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            KeyboardPhraseForm keyboardPhraseForm = new KeyboardPhraseForm();
+            keyboardPhraseForm.StartPosition = FormStartPosition.Manual;
+            keyboardPhraseForm.Location = new Point(this.Location.X + 0, this.Location.Y + 0);
+            keyboardPhraseForm.Show();
+        }
+
+        public string KeyboardText()
+        {
+
+            return keyBoardPhrase;
+        }
+
+        private void Hotkey_KeyDown(Object sender, KeyEventArgs e)
+        {
+            // Start function
+            if (e.KeyCode == Keys.F7) { btnStart_Click(sender, e); }
+            // Toggle function
+            if (e.KeyCode == Keys.F8) { btnToggle_Click(sender, e); }
+            // Stop function
+            if (e.KeyCode == Keys.F9) { btnStop_Click(sender, e); }
+        }
+
+        private void hotkeysToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
