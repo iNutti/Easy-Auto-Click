@@ -66,6 +66,7 @@ namespace Easy_Auto_Click
             tbSeconds.Click += new EventHandler(tbSeconds_Enter);
             tbMilliseconds.Click += new EventHandler(tbMilliseconds_Enter);
             tbRepetitions.Click += new EventHandler(tbRepetitions_Enter);
+            tbKeyPresses.Click += new EventHandler(tbKeyPresses_Enter);
 
             btnStart.Text = "&Start\n" + startHotkey;
             btnToggle.Text = "&Toggle\n" + toggleHotkey;
@@ -81,6 +82,7 @@ namespace Easy_Auto_Click
         private void tbSeconds_Enter(Object sender, EventArgs e) { tbSeconds.SelectAll(); }
         private void tbMilliseconds_Enter(Object sender, EventArgs e) { tbMilliseconds.SelectAll(); }
         private void tbRepetitions_Enter(Object sender, EventArgs e) { tbRepetitions.SelectAll(); }
+        private void tbKeyPresses_Enter(Object sender, EventArgs e) {tbKeyPresses.SelectAll(); }
 
         private void timer_ProgressChanged(Object sender, ProgressChangedEventArgs e) { progressBar1.Value = e.ProgressPercentage; }
         private void tCountdownTimer_tick(Object sender, EventArgs e) {/*tCountdownTimer.Tick += new System.EventHandler(OnTimerEvent);*/}
@@ -394,7 +396,7 @@ namespace Easy_Auto_Click
 
         private void patreonToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string patreonLink = "youtube.com";
+            string patreonLink = "https://www.patreon.com/inutti";
             Process.Start(new ProcessStartInfo(patreonLink) { UseShellExecute = true });
         }
 
@@ -452,10 +454,11 @@ namespace Easy_Auto_Click
 
         public void keyboardTypingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            KeyboardPhraseForm keyboardPhraseForm = new KeyboardPhraseForm();
+/*            KeyboardPhraseForm keyboardPhraseForm = new KeyboardPhraseForm();
             keyboardPhraseForm.StartPosition = FormStartPosition.Manual;
             keyboardPhraseForm.Location = new Point(this.Location.X + 0, this.Location.Y + 0);
             keyboardPhraseForm.Show();
+*/
         }
 
         public string KeyboardText()

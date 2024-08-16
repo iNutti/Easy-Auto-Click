@@ -35,6 +35,7 @@
             // 
             // tbPhrase
             // 
+            tbPhrase.Enabled = false;
             tbPhrase.Location = new Point(12, 12);
             tbPhrase.Name = "tbPhrase";
             tbPhrase.Size = new Size(412, 23);
@@ -43,6 +44,7 @@
             // 
             // btnSave
             // 
+            btnSave.Enabled = false;
             btnSave.Font = new Font("Montserrat", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnSave.Location = new Point(166, 60);
             btnSave.Name = "btnSave";
