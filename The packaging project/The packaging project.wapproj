@@ -58,7 +58,7 @@
     <NoWarn>$(NoWarn);NU1702</NoWarn>
     <EntryPointProjectUniqueName>..\Easy Auto Click\Easy Auto Click.csproj</EntryPointProjectUniqueName>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
-    <PackageCertificateThumbprint>CE1FF3705EE1296FEEC999257BB34248D1BCC6E6</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>A4F21BDE0D50E3CB888E28F7ED6F4243524FC4F8</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampServerUrl>http://timestamp.digicert.com</AppxPackageSigningTimestampServerUrl>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
@@ -171,9 +171,6 @@
     <None Include="The packaging project_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" PrivateAssets="all" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Easy Auto Click\Easy Auto Click.csproj" />
   </ItemGroup>
