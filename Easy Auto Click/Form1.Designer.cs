@@ -78,32 +78,34 @@ namespace Easy_Auto_Click
             // 
             // menuStrip1
             // 
+            menuStrip1.ImageScalingSize = new Size(32, 32);
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, optionsToolStripMenuItem, supportToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(384, 24);
+            menuStrip1.Padding = new Padding(11, 4, 0, 4);
+            menuStrip1.Size = new Size(713, 46);
             menuStrip1.TabIndex = 3;
             menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, openToolStripMenuItem, resetSettingsToolStripMenuItem, exitToolStripMenuItem });
-            fileToolStripMenuItem.Font = new Font("Montserrat", 8F);
+            fileToolStripMenuItem.Font = new Font("Microsoft Sans Serif", 8F);
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(39, 20);
+            fileToolStripMenuItem.Size = new Size(67, 38);
             fileToolStripMenuItem.Text = "&File";
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(151, 22);
+            saveToolStripMenuItem.Size = new Size(359, 44);
             saveToolStripMenuItem.Text = "&Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(151, 22);
+            openToolStripMenuItem.Size = new Size(359, 44);
             openToolStripMenuItem.Text = "&Load";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
@@ -111,48 +113,48 @@ namespace Easy_Auto_Click
             // 
             resetSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { areYouSureToolStripMenuItem, noToolStripMenuItem, yesToolStripMenuItem });
             resetSettingsToolStripMenuItem.Name = "resetSettingsToolStripMenuItem";
-            resetSettingsToolStripMenuItem.Size = new Size(151, 22);
+            resetSettingsToolStripMenuItem.Size = new Size(359, 44);
             resetSettingsToolStripMenuItem.Text = "Reset settings";
             // 
             // areYouSureToolStripMenuItem
             // 
             areYouSureToolStripMenuItem.Name = "areYouSureToolStripMenuItem";
-            areYouSureToolStripMenuItem.Size = new Size(147, 22);
+            areYouSureToolStripMenuItem.Size = new Size(278, 44);
             areYouSureToolStripMenuItem.Text = "Are you sure?";
             // 
             // noToolStripMenuItem
             // 
             noToolStripMenuItem.Name = "noToolStripMenuItem";
-            noToolStripMenuItem.Size = new Size(147, 22);
+            noToolStripMenuItem.Size = new Size(278, 44);
             noToolStripMenuItem.Text = "No";
             // 
             // yesToolStripMenuItem
             // 
             yesToolStripMenuItem.Name = "yesToolStripMenuItem";
-            yesToolStripMenuItem.Size = new Size(147, 22);
+            yesToolStripMenuItem.Size = new Size(278, 44);
             yesToolStripMenuItem.Text = "Yes";
             yesToolStripMenuItem.Click += yesToolStripMenuItem_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(151, 22);
+            exitToolStripMenuItem.Size = new Size(359, 44);
             exitToolStripMenuItem.Text = "E&xit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // optionsToolStripMenuItem
             // 
             optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnTopToolStripMenuItem, saveOnExitToolStripMenuItem, closeOnceFinishedToolStripMenuItem, keyboardTypingToolStripMenuItem, hotkeysToolStripMenuItem });
-            optionsToolStripMenuItem.Font = new Font("Montserrat", 8F);
+            optionsToolStripMenuItem.Font = new Font("Microsoft Sans Serif", 8F);
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            optionsToolStripMenuItem.Size = new Size(61, 20);
+            optionsToolStripMenuItem.Size = new Size(107, 38);
             optionsToolStripMenuItem.Text = "&Options";
             // 
             // alwaysOnTopToolStripMenuItem
             // 
             alwaysOnTopToolStripMenuItem.CheckOnClick = true;
             alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
-            alwaysOnTopToolStripMenuItem.Size = new Size(199, 22);
+            alwaysOnTopToolStripMenuItem.Size = new Size(359, 44);
             alwaysOnTopToolStripMenuItem.Text = "Always on top";
             alwaysOnTopToolStripMenuItem.Click += alwaysOnTopToolStripMenuItem_Click;
             // 
@@ -160,49 +162,49 @@ namespace Easy_Auto_Click
             // 
             saveOnExitToolStripMenuItem.CheckOnClick = true;
             saveOnExitToolStripMenuItem.Name = "saveOnExitToolStripMenuItem";
-            saveOnExitToolStripMenuItem.Size = new Size(199, 22);
+            saveOnExitToolStripMenuItem.Size = new Size(359, 44);
             saveOnExitToolStripMenuItem.Text = "Save on exit";
             // 
             // closeOnceFinishedToolStripMenuItem
             // 
             closeOnceFinishedToolStripMenuItem.CheckOnClick = true;
             closeOnceFinishedToolStripMenuItem.Name = "closeOnceFinishedToolStripMenuItem";
-            closeOnceFinishedToolStripMenuItem.Size = new Size(199, 22);
+            closeOnceFinishedToolStripMenuItem.Size = new Size(359, 44);
             closeOnceFinishedToolStripMenuItem.Text = "Close when done";
             // 
             // keyboardTypingToolStripMenuItem
             // 
             keyboardTypingToolStripMenuItem.Name = "keyboardTypingToolStripMenuItem";
-            keyboardTypingToolStripMenuItem.Size = new Size(199, 22);
-            keyboardTypingToolStripMenuItem.Text = "Keyboard phrase (WIP)";
+            keyboardTypingToolStripMenuItem.Size = new Size(359, 44);
+            keyboardTypingToolStripMenuItem.Text = "Keyboard phrase";
             keyboardTypingToolStripMenuItem.Click += keyboardTypingToolStripMenuItem_Click;
             // 
             // hotkeysToolStripMenuItem
             // 
             hotkeysToolStripMenuItem.Name = "hotkeysToolStripMenuItem";
-            hotkeysToolStripMenuItem.Size = new Size(199, 22);
+            hotkeysToolStripMenuItem.Size = new Size(359, 44);
             hotkeysToolStripMenuItem.Text = "Hotkeys (WIP)";
             hotkeysToolStripMenuItem.Click += hotkeysToolStripMenuItem_Click;
             // 
             // supportToolStripMenuItem
             // 
             supportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { githubToolStripMenuItem, patreonToolStripMenuItem });
-            supportToolStripMenuItem.Font = new Font("Montserrat", 8F);
+            supportToolStripMenuItem.Font = new Font("Microsoft Sans Serif", 8F);
             supportToolStripMenuItem.Name = "supportToolStripMenuItem";
-            supportToolStripMenuItem.Size = new Size(62, 20);
+            supportToolStripMenuItem.Size = new Size(108, 38);
             supportToolStripMenuItem.Text = "&Support";
             // 
             // githubToolStripMenuItem
             // 
             githubToolStripMenuItem.Name = "githubToolStripMenuItem";
-            githubToolStripMenuItem.Size = new Size(117, 22);
+            githubToolStripMenuItem.Size = new Size(219, 44);
             githubToolStripMenuItem.Text = "Github";
             githubToolStripMenuItem.Click += githubToolStripMenuItem_Click;
             // 
             // patreonToolStripMenuItem
             // 
             patreonToolStripMenuItem.Name = "patreonToolStripMenuItem";
-            patreonToolStripMenuItem.Size = new Size(117, 22);
+            patreonToolStripMenuItem.Size = new Size(219, 44);
             patreonToolStripMenuItem.Text = "Patreon";
             patreonToolStripMenuItem.Click += patreonToolStripMenuItem_Click;
             // 
@@ -212,10 +214,11 @@ namespace Easy_Auto_Click
             // 
             // btnStart
             // 
-            btnStart.Font = new Font("Montserrat", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnStart.Location = new Point(12, 289);
+            btnStart.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnStart.Location = new Point(22, 617);
+            btnStart.Margin = new Padding(6, 6, 6, 6);
             btnStart.Name = "btnStart";
-            btnStart.Size = new Size(100, 60);
+            btnStart.Size = new Size(186, 128);
             btnStart.TabIndex = 0;
             btnStart.Text = "&Start";
             btnStart.UseVisualStyleBackColor = true;
@@ -223,18 +226,20 @@ namespace Easy_Auto_Click
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(0, 27);
+            progressBar1.Location = new Point(0, 58);
+            progressBar1.Margin = new Padding(6, 6, 6, 6);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(384, 333);
+            progressBar1.Size = new Size(713, 710);
             progressBar1.TabIndex = 10;
             // 
             // btnStop
             // 
             btnStop.Enabled = false;
-            btnStop.Font = new Font("Montserrat", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnStop.Location = new Point(272, 289);
+            btnStop.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnStop.Location = new Point(505, 617);
+            btnStop.Margin = new Padding(6, 6, 6, 6);
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(100, 60);
+            btnStop.Size = new Size(186, 128);
             btnStop.TabIndex = 2;
             btnStop.Text = "S&top";
             btnStop.UseVisualStyleBackColor = true;
@@ -242,20 +247,22 @@ namespace Easy_Auto_Click
             // 
             // tbHours
             // 
-            tbHours.Font = new Font("Montserrat", 10F);
-            tbHours.Location = new Point(6, 21);
+            tbHours.Font = new Font("Microsoft Sans Serif", 10F);
+            tbHours.Location = new Point(11, 45);
+            tbHours.Margin = new Padding(6, 6, 6, 6);
             tbHours.Name = "tbHours";
-            tbHours.Size = new Size(102, 24);
+            tbHours.Size = new Size(186, 38);
             tbHours.TabIndex = 0;
             tbHours.Text = "Hours";
             tbHours.TextAlign = HorizontalAlignment.Center;
             // 
             // tbMinutes
             // 
-            tbMinutes.Font = new Font("Montserrat", 10F);
-            tbMinutes.Location = new Point(6, 51);
+            tbMinutes.Font = new Font("Microsoft Sans Serif", 10F);
+            tbMinutes.Location = new Point(11, 109);
+            tbMinutes.Margin = new Padding(6, 6, 6, 6);
             tbMinutes.Name = "tbMinutes";
-            tbMinutes.Size = new Size(102, 24);
+            tbMinutes.Size = new Size(186, 38);
             tbMinutes.TabIndex = 1;
             tbMinutes.Text = "Minutes";
             tbMinutes.TextAlign = HorizontalAlignment.Center;
@@ -266,29 +273,33 @@ namespace Easy_Auto_Click
             gbInterval.Controls.Add(tbSeconds);
             gbInterval.Controls.Add(tbHours);
             gbInterval.Controls.Add(tbMinutes);
-            gbInterval.Location = new Point(12, 43);
+            gbInterval.Location = new Point(22, 92);
+            gbInterval.Margin = new Padding(6, 6, 6, 6);
             gbInterval.Name = "gbInterval";
-            gbInterval.Size = new Size(114, 150);
+            gbInterval.Padding = new Padding(6, 6, 6, 6);
+            gbInterval.Size = new Size(212, 320);
             gbInterval.TabIndex = 7;
             gbInterval.TabStop = false;
             gbInterval.Text = "Interval";
             // 
             // tbMilliseconds
             // 
-            tbMilliseconds.Font = new Font("Montserrat", 10F);
-            tbMilliseconds.Location = new Point(6, 111);
+            tbMilliseconds.Font = new Font("Microsoft Sans Serif", 10F);
+            tbMilliseconds.Location = new Point(11, 237);
+            tbMilliseconds.Margin = new Padding(6, 6, 6, 6);
             tbMilliseconds.Name = "tbMilliseconds";
-            tbMilliseconds.Size = new Size(102, 24);
+            tbMilliseconds.Size = new Size(186, 38);
             tbMilliseconds.TabIndex = 3;
             tbMilliseconds.Text = "Milliseconds";
             tbMilliseconds.TextAlign = HorizontalAlignment.Center;
             // 
             // tbSeconds
             // 
-            tbSeconds.Font = new Font("Montserrat", 10F);
-            tbSeconds.Location = new Point(6, 81);
+            tbSeconds.Font = new Font("Microsoft Sans Serif", 10F);
+            tbSeconds.Location = new Point(11, 173);
+            tbSeconds.Margin = new Padding(6, 6, 6, 6);
             tbSeconds.Name = "tbSeconds";
-            tbSeconds.Size = new Size(102, 24);
+            tbSeconds.Size = new Size(186, 38);
             tbSeconds.TabIndex = 2;
             tbSeconds.Text = "Seconds";
             tbSeconds.TextAlign = HorizontalAlignment.Center;
@@ -307,9 +318,11 @@ namespace Easy_Auto_Click
             // 
             groupBox1.Controls.Add(tbRepetitions);
             groupBox1.Controls.Add(cbInfiniteOrFinite);
-            groupBox1.Location = new Point(258, 43);
+            groupBox1.Location = new Point(479, 92);
+            groupBox1.Margin = new Padding(6, 6, 6, 6);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(114, 150);
+            groupBox1.Padding = new Padding(6, 6, 6, 6);
+            groupBox1.Size = new Size(212, 320);
             groupBox1.TabIndex = 11;
             groupBox1.TabStop = false;
             groupBox1.Text = "Repetition";
@@ -317,10 +330,11 @@ namespace Easy_Auto_Click
             // tbRepetitions
             // 
             tbRepetitions.Enabled = false;
-            tbRepetitions.Font = new Font("Montserrat", 10F);
-            tbRepetitions.Location = new Point(6, 52);
+            tbRepetitions.Font = new Font("Microsoft Sans Serif", 10F);
+            tbRepetitions.Location = new Point(11, 111);
+            tbRepetitions.Margin = new Padding(6, 6, 6, 6);
             tbRepetitions.Name = "tbRepetitions";
-            tbRepetitions.Size = new Size(102, 24);
+            tbRepetitions.Size = new Size(186, 38);
             tbRepetitions.TabIndex = 4;
             tbRepetitions.Text = "Repetitions";
             tbRepetitions.TextAlign = HorizontalAlignment.Center;
@@ -329,9 +343,10 @@ namespace Easy_Auto_Click
             // 
             cbInfiniteOrFinite.FormattingEnabled = true;
             cbInfiniteOrFinite.Items.AddRange(new object[] { "Infinite", "Finite" });
-            cbInfiniteOrFinite.Location = new Point(6, 23);
+            cbInfiniteOrFinite.Location = new Point(11, 49);
+            cbInfiniteOrFinite.Margin = new Padding(6, 6, 6, 6);
             cbInfiniteOrFinite.Name = "cbInfiniteOrFinite";
-            cbInfiniteOrFinite.Size = new Size(102, 23);
+            cbInfiniteOrFinite.Size = new Size(186, 40);
             cbInfiniteOrFinite.TabIndex = 3;
             cbInfiniteOrFinite.SelectedIndexChanged += cbInfiniteOrFinite_SelectedIndexChanged;
             // 
@@ -340,19 +355,22 @@ namespace Easy_Auto_Click
             groupBox2.Controls.Add(tbKeyPresses);
             groupBox2.Controls.Add(cbButtonChoice);
             groupBox2.Controls.Add(cbKeyboardOrMouse);
-            groupBox2.Location = new Point(135, 43);
+            groupBox2.Location = new Point(251, 92);
+            groupBox2.Margin = new Padding(6, 6, 6, 6);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(114, 150);
+            groupBox2.Padding = new Padding(6, 6, 6, 6);
+            groupBox2.Size = new Size(212, 320);
             groupBox2.TabIndex = 12;
             groupBox2.TabStop = false;
             groupBox2.Text = "Hotkey";
             // 
             // tbKeyPresses
             // 
-            tbKeyPresses.Font = new Font("Montserrat", 10F);
-            tbKeyPresses.Location = new Point(6, 81);
+            tbKeyPresses.Font = new Font("Microsoft Sans Serif", 10F);
+            tbKeyPresses.Location = new Point(11, 173);
+            tbKeyPresses.Margin = new Padding(6, 6, 6, 6);
             tbKeyPresses.Name = "tbKeyPresses";
-            tbKeyPresses.Size = new Size(102, 24);
+            tbKeyPresses.Size = new Size(186, 38);
             tbKeyPresses.TabIndex = 5;
             tbKeyPresses.Text = "# key presses";
             tbKeyPresses.TextAlign = HorizontalAlignment.Center;
@@ -361,9 +379,10 @@ namespace Easy_Auto_Click
             // 
             cbButtonChoice.FormattingEnabled = true;
             cbButtonChoice.Items.AddRange(new object[] { "Left mouse", "Right mouse", "Middle mouse" });
-            cbButtonChoice.Location = new Point(6, 51);
+            cbButtonChoice.Location = new Point(11, 109);
+            cbButtonChoice.Margin = new Padding(6, 6, 6, 6);
             cbButtonChoice.Name = "cbButtonChoice";
-            cbButtonChoice.Size = new Size(102, 23);
+            cbButtonChoice.Size = new Size(186, 40);
             cbButtonChoice.TabIndex = 1;
             // 
             // cbKeyboardOrMouse
@@ -373,18 +392,20 @@ namespace Easy_Auto_Click
             cbKeyboardOrMouse.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbKeyboardOrMouse.FormattingEnabled = true;
             cbKeyboardOrMouse.Items.AddRange(new object[] { "Keyboard (WIP)", "Mouse" });
-            cbKeyboardOrMouse.Location = new Point(6, 23);
+            cbKeyboardOrMouse.Location = new Point(11, 49);
+            cbKeyboardOrMouse.Margin = new Padding(6, 6, 6, 6);
             cbKeyboardOrMouse.Name = "cbKeyboardOrMouse";
-            cbKeyboardOrMouse.Size = new Size(102, 23);
+            cbKeyboardOrMouse.Size = new Size(186, 40);
             cbKeyboardOrMouse.TabIndex = 0;
             cbKeyboardOrMouse.SelectedIndexChanged += cbKeyboardOrMouse_SelectedIndexChanged;
             // 
             // btnToggle
             // 
-            btnToggle.Font = new Font("Montserrat", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnToggle.Location = new Point(142, 289);
+            btnToggle.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnToggle.Location = new Point(264, 617);
+            btnToggle.Margin = new Padding(6, 6, 6, 6);
             btnToggle.Name = "btnToggle";
-            btnToggle.Size = new Size(100, 60);
+            btnToggle.Size = new Size(186, 128);
             btnToggle.TabIndex = 13;
             btnToggle.Text = "&Toggle";
             btnToggle.UseVisualStyleBackColor = true;
@@ -394,10 +415,10 @@ namespace Easy_Auto_Click
             // 
             AccessibleDescription = "Easy Auto Click";
             AccessibleName = "Easy Auto Click";
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(384, 361);
+            ClientSize = new Size(713, 770);
             Controls.Add(btnToggle);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -410,6 +431,7 @@ namespace Easy_Auto_Click
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(6, 6, 6, 6);
             MaximizeBox = false;
             Name = "easyAutoClick";
             SizeGripStyle = SizeGripStyle.Hide;

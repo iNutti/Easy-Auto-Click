@@ -35,20 +35,23 @@
             // 
             // tbPhrase
             // 
-            tbPhrase.Enabled = false;
-            tbPhrase.Location = new Point(12, 12);
+            tbPhrase.AcceptsReturn = true;
+            tbPhrase.Location = new Point(22, 26);
+            tbPhrase.Margin = new Padding(6);
+            tbPhrase.Multiline = true;
             tbPhrase.Name = "tbPhrase";
-            tbPhrase.Size = new Size(412, 23);
+            tbPhrase.Size = new Size(762, 39);
             tbPhrase.TabIndex = 0;
-            tbPhrase.Text = "This feature does not currently work.";
+            tbPhrase.Text = "What do you want to say?";
+            tbPhrase.KeyPress += Enter;
             // 
             // btnSave
             // 
-            btnSave.Enabled = false;
-            btnSave.Font = new Font("Montserrat", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSave.Location = new Point(166, 60);
+            btnSave.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSave.Location = new Point(308, 127);
+            btnSave.Margin = new Padding(6);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(100, 60);
+            btnSave.Size = new Size(186, 128);
             btnSave.TabIndex = 1;
             btnSave.Text = "&Save";
             btnSave.UseVisualStyleBackColor = true;
@@ -56,12 +59,13 @@
             // 
             // KeyboardPhraseForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(436, 143);
+            ClientSize = new Size(810, 305);
             Controls.Add(btnSave);
             Controls.Add(tbPhrase);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(6);
             Name = "KeyboardPhraseForm";
             Text = "Type out a phrase!";
             TopMost = true;

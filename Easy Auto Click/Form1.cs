@@ -24,7 +24,7 @@ namespace Easy_Auto_Click
         public string toggleHotkey = "F8";
         public string stopHotkey = "F9";
         public string keyBoardPhrase = "Hello world!";
-        string userDefinedKeys = "a";
+        public string userDefinedKeys = "a";
 
         int numHours = 0;
         int numMinutes = 0;
@@ -82,12 +82,12 @@ namespace Easy_Auto_Click
         private void tbSeconds_Enter(Object sender, EventArgs e) { tbSeconds.SelectAll(); }
         private void tbMilliseconds_Enter(Object sender, EventArgs e) { tbMilliseconds.SelectAll(); }
         private void tbRepetitions_Enter(Object sender, EventArgs e) { tbRepetitions.SelectAll(); }
-        private void tbKeyPresses_Enter(Object sender, EventArgs e) {tbKeyPresses.SelectAll(); }
+        private void tbKeyPresses_Enter(Object sender, EventArgs e) { tbKeyPresses.SelectAll(); }
 
         private void timer_ProgressChanged(Object sender, ProgressChangedEventArgs e) { progressBar1.Value = e.ProgressPercentage; }
         private void tCountdownTimer_tick(Object sender, EventArgs e) {/*tCountdownTimer.Tick += new System.EventHandler(OnTimerEvent);*/}
 
-        private void cbKeyboardOrMouse_SelectedIndexChanged(Object sender, EventArgs e) { if (cbKeyboardOrMouse.SelectedIndex == 0) { cbButtonChoice.Enabled = false; } else { cbButtonChoice.Enabled = true; } }
+        private void cbKeyboardOrMouse_SelectedIndexChanged(Object sender, EventArgs e) { if (cbKeyboardOrMouse.SelectedIndex == 0) { cbButtonChoice.Enabled = false; tbRepetitions.Enabled = false; } else { cbButtonChoice.Enabled = true; } }
         private void cbInfiniteOrFinite_SelectedIndexChanged(Object sender, EventArgs e)
         {
             if (cbInfiniteOrFinite.SelectedIndex == 1)
@@ -100,15 +100,47 @@ namespace Easy_Auto_Click
             }
         }
 
-        private void btnStart_Click(Object sender, EventArgs e)
+        // Everything begins here
+        private void btnStart_Click(Object sender, EventArgs e) 
         {
+            Phrase_Load(); // Load the phrase on every start.
+
+            // Find the install path and open the keyboard phrase file. This is a workaround cus I'm not C# smart yet.
+            if (cbKeyboardOrMouse.SelectedIndex == 0)
+            {
+                string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    byte[] data = new byte[fs.Length];
+                    fs.Read(data, 0, data.Length);
+                    string singleString = Encoding.UTF8.GetString(data);
+                    string[] settings = singleString.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (string setting in settings)
+                    {
+                        string[] keyValue = setting.Split(" = ");
+
+                        if (keyValue.Length == 2)
+                        {
+                            string key = keyValue[0];
+                            string value = keyValue[1];
+
+                            if (key == "Phrase") { userDefinedKeys = value; }
+                        }
+                    }
+                    fs.Close();
+                }
+
+            }
+
+            // Cancel any previous timer
             this.timer.CancelAsync();
+
             if (int.TryParse(tbHours.Text, out numHours)) {/*Hours successfully parsed*/}
             if (int.TryParse(tbMinutes.Text, out numMinutes)) {/*Minutes successfully parsed*/}
             if (int.TryParse(tbSeconds.Text, out numSeconds)) {/*Seconds successfully parsed*/}
             if ((int.TryParse(tbMilliseconds.Text, out numMilliseconds))) {/*Milliseconds successfully parsed*/}
             if (cbKeyboardOrMouse.SelectedIndex == 1) { if (int.TryParse(tbKeyPresses.Text, out keyPresses)) {/*Key presses successfully parsed*/ } }
-            //if (cbKeyboardOrMouse.SelectedIndex == 1) { mouseIsUsed = true; }
             if (numHours != 0 || numMinutes != 0 || numSeconds != 0 || numMilliseconds != 0)
             {
                 btnStart.Enabled = false;
@@ -141,26 +173,10 @@ namespace Easy_Auto_Click
             }
         }
 
+        // Start asynchronus task so the form doesn't lock up.
         private void StartAsyncButton_Click(Object sender, EventArgs e) { if (timer.IsBusy != true) { timer.RunWorkerAsync(); } }
-        /*
-                private void pauseAsyncButton_Click(Object sender, EventArgs e)
-                {
-                    if (isPaused == false)
-                    {
-                        btnPause.Text = "Unpause";
-                        isPaused = true;
-                        if (cts.Token.IsCancellationRequested == true)
-                            {DoWorkAsync(cts.Token);}
-                        if (cts1.Token.IsCancellationRequested == true)
-                            {DoWorkAsync(cts1.Token);}
-                    }
-                    else if (isPaused == true)
-                    {
-                        btnPause.Text = "Pause";
-                        isPaused = false;
-                    }
-                }
-        */
+
+        // Stop all previous work, no pause
         private void btnStop_Click(Object sender, EventArgs e)
         {
             tCountdownTimer.Stop();
@@ -181,8 +197,10 @@ namespace Easy_Auto_Click
             cts.Cancel();
         }
 
+        // WIP - Stops background timer.
         private void StopAsyncButton_Click(Object sender, EventArgs e) { this.timer.CancelAsync(); }
 
+        // Here is where we count down. Run async so the form does not lock.
         private async void Timer_DoWork(Object sender, DoWorkEventArgs e)
         {
             BackgroundWorker timer = sender as BackgroundWorker;
@@ -247,6 +265,7 @@ namespace Easy_Auto_Click
             });
         }
 
+        // Timer countdown results in either mouse click or typed out phrase.
         public void PerformUserDefinedAction()
         {
             int keyboardOrMouse = 1;
@@ -258,16 +277,18 @@ namespace Easy_Auto_Click
             });
             if (keyboardOrMouse == 1)
             {
-                if (buttonChoice == 0) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0); }
-                else if (buttonChoice == 1) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, X, Y, 0, 0); }
-                else if (buttonChoice == 2) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_MIDDLEDOWN | MOUSEEVENTF_MIDDLEUP, X, Y, 0, 0); }
+                if (cbButtonChoice.SelectedIndex == 0) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0); }
+                else if (cbButtonChoice.SelectedIndex == 1) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, X, Y, 0, 0); }
+                else if (cbButtonChoice.SelectedIndex == 2) { uint X = (uint)Cursor.Position.X; uint Y = (uint)Cursor.Position.Y; mouse_event(MOUSEEVENTF_MIDDLEDOWN | MOUSEEVENTF_MIDDLEUP, X, Y, 0, 0); }
             }
             else
             {
-                // Keyboard typing goes here
+                Debug.WriteLine(userDefinedKeys);
+                SendKeys.SendWait(userDefinedKeys + "{ENTER}");
             }
         }
 
+        // Adds pause ability
         public async Task DoWorkAsync(CancellationToken cancellationToken)
         {
             this.Invoke((MethodInvoker)delegate
@@ -287,6 +308,7 @@ namespace Easy_Auto_Click
             });
             try
             {
+                // The meat of this class - the countdownTimer variable is set back in the Timer_DoWork class.
                 await Task.Delay(countdownTimer, cancellationToken);
                 while (isPaused)
                 {
@@ -299,6 +321,7 @@ namespace Easy_Auto_Click
             }
         }
 
+        // Does not currently serve a purpose.
         private void timer_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs d)
         {
             if (d.Cancelled == true)
@@ -315,6 +338,7 @@ namespace Easy_Auto_Click
             }
         }
 
+        // Self explanatory class name.
         public void saveToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
@@ -339,6 +363,7 @@ namespace Easy_Auto_Click
             fs.Close();
         }
 
+        // File > Load option in the toolstrip menu.
         public void openToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
@@ -367,6 +392,7 @@ namespace Easy_Auto_Click
                         if (key == "# Key presses") { tbKeyPresses.Text = value; }
                         if (key == "Infinite") { int.TryParse(value, out int numValue); cbInfiniteOrFinite.SelectedIndex = numValue; }
                         if (key == "# Repeats") { int.TryParse(value, out int numValue); tbRepetitions.Text = value; }
+                        if (key == "Phrase") { keyBoardPhrase = value; }
                     }
                 }
                 fs.Close();
@@ -375,33 +401,41 @@ namespace Easy_Auto_Click
             if (cbInfiniteOrFinite.SelectedIndex == 0) { this.Invoke((MethodInvoker)delegate { tbRepetitions.Enabled = false; tbRepetitions.Text = "Repititions"; }); }
         }
 
+        // Always on top option.
         private void alwaysOnTopToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             if (alwaysOnTopToolStripMenuItem.Checked) { this.TopMost = true; }
             else if (!alwaysOnTopToolStripMenuItem.Checked) { this.TopMost = false; }
         }
 
+        // File > Reset > Yes in the toolstrip menu. Deletes the settings file.
         private void yesToolStripMenuItem_Click(Object sender, EventArgs e)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
             if (File.Exists(path)) { File.Delete(path); Debug.WriteLine("File deleted successfully."); }
             else { MessageBox.Show("Failed to find file.", "Error", MessageBoxButtons.OK); }
+            // Unchecking this since it would be confusing to delete settings but then settings get re-saved anyways.
+            saveOnExitToolStripMenuItem.Checked = false;
         }
 
+        // Github web link.
         private void githubToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string gitHubLink = "https://github.com/iNutti/Easy-Auto-Click/tree/master";
             Process.Start(new ProcessStartInfo(gitHubLink) { UseShellExecute = true });
         }
 
+        // Patreon web link.
         private void patreonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string patreonLink = "https://www.patreon.com/inutti";
             Process.Start(new ProcessStartInfo(patreonLink) { UseShellExecute = true });
         }
 
+        // Close program from menu.
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) { this.Close(); }
 
+        // Form load events. Mostly for loading settings into boxes.
         private void easyAutoClick_Load(Object sender, EventArgs e)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\menu.txt";
@@ -423,6 +457,7 @@ namespace Easy_Auto_Click
                         if (key == "Always on top") { if (value == "true") this.Invoke((MethodInvoker)delegate { alwaysOnTopToolStripMenuItem.Checked = true; }); }
                         if (key == "Save on exit") { if (value == "true") this.Invoke((MethodInvoker)delegate { saveOnExitToolStripMenuItem.Checked = true; }); }
                         if (key == "Close when done") { if (value == "true") this.Invoke((MethodInvoker)delegate { closeOnceFinishedToolStripMenuItem.Checked = true; }); }
+                        if (key == "Phrase") { userDefinedKeys = value; } else { }
                     }
                 }
                 fs.Close();
@@ -430,6 +465,7 @@ namespace Easy_Auto_Click
             openToolStripMenuItem_Click(sender, e);
         }
 
+        // Form close events. Mostly for save on close toolstrip menu item.
         private void easyAutoClick_FormClosing(Object sender, FormClosingEventArgs e)
         {
             if (saveOnExitToolStripMenuItem.Checked) { saveToolStripMenuItem_Click(sender, e); }
@@ -447,26 +483,22 @@ namespace Easy_Auto_Click
             fs.Close();
         }
 
+        // Toggle start or stop.
         private void btnToggle_Click(object sender, EventArgs e)
         {
             if (toggle == false) { btnStop_Click(sender, e); toggle = true; } else { btnStart_Click(sender, e); toggle = false; }
         }
 
+        // Loads keyboardphraseform.
         public void keyboardTypingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-/*            KeyboardPhraseForm keyboardPhraseForm = new KeyboardPhraseForm();
+            KeyboardPhraseForm keyboardPhraseForm = new KeyboardPhraseForm();
             keyboardPhraseForm.StartPosition = FormStartPosition.Manual;
             keyboardPhraseForm.Location = new Point(this.Location.X + 0, this.Location.Y + 0);
             keyboardPhraseForm.Show();
-*/
         }
 
-        public string KeyboardText()
-        {
-
-            return keyBoardPhrase;
-        }
-
+        // For hotkeys to toggle form buttons.
         private void Hotkey_KeyDown(Object sender, KeyEventArgs e)
         {
             // Start function
@@ -477,9 +509,84 @@ namespace Easy_Auto_Click
             if (e.KeyCode == Keys.F9) { btnStop_Click(sender, e); }
         }
 
+        // WIP - Allows the user to define their own hotkeys for form buttons.
         private void hotkeysToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // WIP. Let user change start, toggle, stop hotkeys.
+        }
+        
+        // Used in btnStart_Click. Loads the keyboard phrase every time the start function is used.
+        private void Phrase_Load()
+        {
+            string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
+            bool bPhraseExist = false;
 
+            if (Path.Exists(path)) // Does the settings file exist? Let's not create a new one if it does.
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    byte[] data = new byte[fs.Length];
+                    fs.Read(data, 0, data.Length);
+                    string singleString = Encoding.UTF8.GetString(data);
+                    string[] settings = singleString.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    // Load settings file
+                    foreach (string setting in settings)
+                    {
+                        string[] keyValue = setting.Split(" = ");
+
+                        if (keyValue.Length == 2)
+                        {
+                            string key = keyValue[0];
+                            string value = keyValue[1];
+
+                            // Does the phrase setting exist?
+                            if (key == "Phrase")
+                            {
+                                userDefinedKeys = value;
+                            }
+                            else
+                            {
+                                // Do nothing.
+                            }
+                        }
+                    }
+                    fs.Close(); // Close the connection to the file before reading all lines in.
+                }
+            }
+            else // So the settings.txt file does not exist. Let's create it!
+            {
+                bPhraseExist = false;
+                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Read))
+                {
+                    byte[] data = new byte[fs.Length];
+                    fs.Read(data, 0, data.Length);
+                    string singleString = Encoding.UTF8.GetString(data);
+                    string[] settings = singleString.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    // Load settings file
+                    foreach (string setting in settings)
+                    {
+                        string[] keyValue = setting.Split(" = ");
+
+                        if (keyValue.Length == 2)
+                        {
+                            string key = keyValue[0];
+                            string value = keyValue[1];
+
+                            // Does the phrase setting exist?
+                            if (key == "Phrase")
+                            {
+                                userDefinedKeys = value;
+                            }
+                            else
+                            {
+                                // Do nothing.
+                            }
+                        }
+                    }
+                    fs.Close(); // Close the connection to the file before reading all lines in.
+                }
+
+            }
         }
     }
 }
